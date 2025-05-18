@@ -15,6 +15,7 @@ FlashMaster Pro is a modern, front-end only spaced repetition flashcard applicat
     *   **XP & Levels**: Earn experience points (XP) for studying and level up, providing a gamified learning experience.
 *   **Data Management**:
     *   **Import/Export**: Securely back up and restore your data (decks, cards, stats) using JSON format. Includes versioning for future compatibility.
+    *   **AI-Assisted Flashcard Generation**: Copy a detailed prompt from the settings page to provide to an AI (like ChatGPT, Claude, Gemini) for generating flashcard data in the correct JSON format, ready for import.
     *   **Local Storage**: All data is stored locally in the browser using `localforage` for persistence and offline access.
 *   **Customization & Personalization**:
     *   **Dark/Light Mode**: Switch between themes for comfortable viewing.
