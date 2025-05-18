@@ -14,14 +14,16 @@ export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
+      "react/jsx-runtime": path.resolve(__dirname, "./src/jsx-runtime.ts")
     },
+    dedupe: ['react', 'react-dom']
   },
   optimizeDeps: {
     include: ['i18next-http-backend']
   },
   build: {
     commonjsOptions: {
-      include: [/i18next-http-backend/]
+      include: [/i18next-http-backend/, /node_modules/]
     }
   }
 }));
