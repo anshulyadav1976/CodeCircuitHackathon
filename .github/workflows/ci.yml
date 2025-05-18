@@ -28,13 +28,11 @@ jobs:
       run: npm ci # Use ci for cleaner installs in CI
 
     - name: Run linters
-      run: npm run lint # Assumes you have a lint script in package.json
-      # If lint script doesn't exist, you might need to run ESLint directly:
-      # run: npx eslint . --ext .js,.jsx,.ts,.tsx
+      run: npm run lint 
 
     - name: Run tests
       run: npm test # Assumes test script in package.json runs Jest
 
     - name: Build project (optional)
-      run: npm run build # Assumes you have a build script
+      run: npm run build 
       # if: github.ref == 'refs/heads/main' # Example: only build on main branch pushes 
