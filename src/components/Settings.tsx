@@ -10,6 +10,8 @@ import { exportData, importData } from '../services/storage';
 import { requestNotificationPermission, isNotificationSupported, scheduleReminder, unscheduleReminders } from '../utils/notifications';
 import { toast } from "../components/ui/use-toast";
 import { useTranslation } from 'react-i18next';
+import { Textarea } from "@/components/ui/textarea";
+import { Copy } from 'lucide-react';
 
 const Settings: React.FC = () => {
   const { t, i18n } = useTranslation();
@@ -17,7 +19,83 @@ const Settings: React.FC = () => {
   const [reminderTime, setReminderTime] = useState(preferences.reminderTime || '09:00');
   const [dailyGoal, setDailyGoal] = useState(preferences.dailyGoal.toString());
   const [importFile, setImportFile] = useState<File | null>(null);
+  const [showAiPrompt, setShowAiPrompt] = useState(false);
   
+  const aiPromptText = `
+You are an AI assistant helping a user create flashcards for their spaced repetition app.
+Please generate a JSON object that can be imported into the app. The user will provide the topic and number of cards.
+
+The JSON object MUST have the following top-level structure and keys:
+{
+  "version": 2, // App data version
+  "exportDate": "YYYY-MM-DDTHH:mm:ss.sssZ", // Current ISO date string
+  "deckStoreFullState": {
+    "state": {
+      "decks": [
+        // Array of deck objects
+      ]
+    },
+    "version": 0 // Deck store version
+  },
+  "cardStoreFullState": {
+    "state": {
+      "cards": [
+        // Array of card objects
+      ]
+    },
+    "version": 0 // Card store version
+  },
+  "statsStoreFullState": { // Provide a minimal valid structure
+    "state": {
+      "userStats": { "xp": 0, "level": 1, "cardsReviewedToday": 0, "streak": 0, "lastStudiedDate": null, "dailyGoal": 20, "longestStreak": 0, "totalCardsReviewed": 0, "totalSessions": 0, "totalStudyTime": 0, "accuracy": 100, "xpToNextLevel": 100 },
+      "reviewHistory": [],
+      "dailyProgress": {}
+    },
+    "version": 0
+  },
+  "uiStoreFullState": { // Provide a minimal valid structure
+    "state": {
+      "preferences": { "darkMode": false, "notificationsEnabled": false, "reminderTime": "09:00", "dailyGoal": 20, "showConfetti": true, "language": "en" },
+      "hasHydrated": true
+    },
+    "version": 0
+  }
+}
+
+Deck Structure (for each object in "deckStoreFullState.state.decks"):
+- "id": REQUIRED. String. A unique UUID (e.g., "d1e8f7b1-3c9a-4f5e-8d7c-2b6a9e0f1d2c").
+- "name": REQUIRED. String. Deck's name (e.g., "Spanish Vocabulary").
+- "description": String. Deck's description (can be empty).
+- "cardIds": REQUIRED. Array of strings. Each string must be a UUID of a card in "cardStoreFullState.state.cards" belonging to this deck.
+- "createdAt": REQUIRED. String. ISO date string (e.g., "2023-10-27T10:00:00.000Z").
+- "updatedAt": REQUIRED. String. ISO date string (e.g., "2023-10-27T10:00:00.000Z").
+- "isShared": Boolean. Set to false.
+- "shareId": String. Set to empty string "".
+
+Card Structure (for each object in "cardStoreFullState.state.cards"):
+- "id": REQUIRED. String. A unique UUID (e.g., "c1a2b3c4-d5e6-f7g8-h9i0-j1k2l3m4n5o6").
+- "deckId": REQUIRED. String. The UUID of the deck this card belongs to (must match an "id" from the decks array).
+- "front": REQUIRED. String. Card's front/question. Supports Markdown.
+- "back": REQUIRED. String. Card's back/answer. Supports Markdown.
+- "interval": REQUIRED. Number. Initial value: 1.
+- "repetition": REQUIRED. Number. Initial value: 0.
+- "efactor": REQUIRED. Number. Initial value: 2.5.
+- "dueDate": REQUIRED. String. ISO date string for the next review. For new cards, set to today's date for immediate review.
+- "createdAt": REQUIRED. String. ISO date string.
+- "updatedAt": REQUIRED. String. ISO date string.
+- "lastReviewed": String or null. Initial value: null.
+
+Key Instructions for AI:
+1.  Generate unique UUIDs for all "id" fields (for decks and cards).
+2.  Ensure "cardIds" in decks correctly list the "id"s of their associated cards.
+3.  Ensure "deckId" in cards correctly refers to the "id" of their parent deck.
+4.  Set "createdAt", "updatedAt", and "dueDate" to the current date/time in ISO format. "dueDate" should make cards due today.
+5.  "interval" should be 1, "repetition" 0, "efactor" 2.5, and "lastReviewed" null for new cards.
+6.  Fill "deckStoreFullState.state.decks" and "cardStoreFullState.state.cards" based on user's topic and desired quantity.
+7.  The "statsStoreFullState" and "uiStoreFullState" provided above are minimal examples; use them as is.
+8.  Output ONLY the final JSON object. No extra text, greetings, or explanations.
+`.trim();
+
   const handleToggleDarkMode = () => {
     const currentDarkMode = preferences.darkMode;
     updatePreferences({ darkMode: !currentDarkMode });
@@ -153,6 +231,24 @@ const Settings: React.FC = () => {
     }
   };
   
+  const handleCopyPrompt = () => {
+    navigator.clipboard.writeText(aiPromptText)
+      .then(() => {
+        toast({
+          title: "Prompt Copied!",
+          description: "The AI prompt has been copied to your clipboard.",
+        });
+      })
+      .catch(err => {
+        console.error('Failed to copy prompt: ', err);
+        toast({
+          title: "Copy Failed",
+          description: "Could not copy the prompt. Please try again or copy manually.",
+          variant: "destructive",
+        });
+      });
+  };
+  
   return (
     <div className="space-y-6">
       <Card>
@@ -265,6 +361,76 @@ const Settings: React.FC = () => {
       <Card>
         <CardHeader>
           <CardTitle>{t('settings_import_export_title')}</CardTitle>
+          <CardDescription>
+            Export or import your flashcard data
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-6">
+          <div>
+            <Button onClick={handleExport} variant="outline">
+              {t('settings_export_button')}
+            </Button>
+            <p className="text-sm text-muted-foreground mt-2">
+              Download all your decks and cards as a JSON file
+            </p>
+          </div>
+          
+          <div className="space-y-2">
+            <Label htmlFor="import-file">{t('settings_import_button')}</Label>
+            <div className="flex items-center gap-2">
+              <Input
+                id="import-file"
+                type="file"
+                accept=".json"
+                onChange={handleImportChange}
+              />
+              <Button 
+                onClick={handleImport}
+                disabled={!importFile}
+              >
+                Import
+              </Button>
+            </div>
+            <p className="text-sm text-muted-foreground">
+              Warning: This will replace all your current data
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>Generate Flashcard Data with AI</CardTitle>
+          <CardDescription>
+            Use this prompt with an AI (like ChatGPT, Claude, Gemini, etc.) to generate flashcard data in the correct JSON format for import.
+          </CardDescription>
+        </CardHeader>
+        <CardContent className="space-y-4">
+          <p className="text-sm text-muted-foreground">
+            Click the button below to reveal the prompt. Copy it and provide it to your chosen AI. Tell the AI the topic and number of flashcards you want.
+            Once the AI generates the JSON, save it as a .json file and use the "Import Data" feature above.
+          </p>
+          <Button onClick={() => setShowAiPrompt(!showAiPrompt)} variant="outline">
+            {showAiPrompt ? "Hide AI Prompt" : "Show AI Prompt"}
+          </Button>
+          {showAiPrompt && (
+            <div className="space-y-2 pt-2">
+              <Textarea
+                readOnly
+                value={aiPromptText}
+                className="h-64 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50 font-mono"
+              />
+              <Button onClick={handleCopyPrompt} className="mt-2">
+                <Copy className="mr-2 h-4 w-4" /> Copy Prompt
+              </Button>
+            </div>
+          )}
+        </CardContent>
+      </Card>
+
+      <Card>
+        <CardHeader>
+          <CardTitle>{t('settings_data_management')}</CardTitle>
           <CardDescription>
             Export or import your flashcard data
           </CardDescription>
