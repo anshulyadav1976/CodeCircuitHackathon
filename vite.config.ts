@@ -16,14 +16,12 @@ export default defineConfig(({ mode }) => ({
       "@": path.resolve(__dirname, "./src"),
     },
   },
+  optimizeDeps: {
+    include: ['i18next-http-backend']
+  },
   build: {
-    rollupOptions: {
-      output: {
-        format: 'es',
-        paths: {
-          'i18next-http-backend': '/node_modules/i18next-http-backend/dist/esm/i18nextHttpBackend.js'
-        }
-      }
+    commonjsOptions: {
+      include: [/i18next-http-backend/]
     }
   }
 }));
