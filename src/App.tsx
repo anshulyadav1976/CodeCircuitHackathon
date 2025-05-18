@@ -15,6 +15,7 @@ import SettingsPage from './pages/SettingsPage';
 import NotFound from "./pages/NotFound";
 import ImportSharedDeckPage from './pages/ImportSharedDeckPage';
 import { useUIStore } from './store';
+import { Analytics } from "@vercel/analytics/react";
 
 // Initialize query client
 const queryClient = new QueryClient();
@@ -59,6 +60,7 @@ const App = () => {
 
   return (
     <QueryClientProvider client={queryClient}>
+      <Analytics />
       <TooltipProvider>
         <Toaster />
         <Sonner />
