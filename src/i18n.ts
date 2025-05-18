@@ -1,10 +1,10 @@
 import i18n from 'i18next';
 import { initReactI18next } from 'react-i18next';
-import HttpApi from 'i18next-http-backend'; // To load translations from files
+import HttpBackend from 'i18next-http-backend/esm/i18nextHttpBackend';
 import LanguageDetector from 'i18next-browser-languagedetector'; // To detect user language
 
 i18n
-  .use(HttpApi) // For loading translations from /public/locales
+  .use(HttpBackend) // For loading translations from /public/locales
   .use(LanguageDetector) // Detect user language
   .use(initReactI18next) // Passes i18n down to react-i18next
   .init({

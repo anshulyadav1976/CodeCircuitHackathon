@@ -18,7 +18,12 @@ export default defineConfig(({ mode }) => ({
   },
   build: {
     rollupOptions: {
-      external: ['i18next-http-backend'],
-    },
-  },
+      output: {
+        format: 'es',
+        paths: {
+          'i18next-http-backend': '/node_modules/i18next-http-backend/dist/esm/i18nextHttpBackend.js'
+        }
+      }
+    }
+  }
 }));
