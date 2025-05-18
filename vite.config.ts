@@ -9,17 +9,19 @@ export default defineConfig(({ mode }) => ({
     port: 8080,
   },
   plugins: [
-    react(),
+    react({
+      //jsxRuntime: 'automatic', // This is usually the default and can often be omitted
+    }),
   ].filter(Boolean),
   resolve: {
     alias: {
       "@": path.resolve(__dirname, "./src"),
-      "react/jsx-runtime": path.resolve(__dirname, "./src/jsx-runtime.ts")
+      // Removed the circular alias: "react/jsx-runtime": path.resolve(__dirname, "./src/jsx-runtime.ts")
     },
     dedupe: ['react', 'react-dom']
   },
   optimizeDeps: {
-    include: ['i18next-http-backend']
+    include: ['i18next-http-backend'] // Removed 'react/jsx-runtime'
   },
   build: {
     commonjsOptions: {
