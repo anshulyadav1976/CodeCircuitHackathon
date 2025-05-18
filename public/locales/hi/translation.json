@@ -1,0 +1,16 @@
+{
+  "appName": "फ्लैशमास्टर",
+  "nav_decks": "डेक",
+  "nav_study": "अध्ययन",
+  "nav_stats": "आंकड़े",
+  "nav_settings": "समायोजन",
+  "settings_title": "समायोजन",
+  "settings_dark_mode": "डार्क मोड",
+  "settings_notifications": "सूचनाएं सक्षम करें",
+  "settings_reminder_time": "अनुस्मारक समय",
+  "settings_daily_goal": "दैनिक अध्ययन लक्ष्य (कार्ड)",
+  "settings_import_export_title": "डेटा आयात / निर्यात करें",
+  "settings_import_button": "डेटा आयात करें",
+  "settings_export_button": "डेटा निर्यात करें",
+  "settings_language_label": "भाषा"
+} 

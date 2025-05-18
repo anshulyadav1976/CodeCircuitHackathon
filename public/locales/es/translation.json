@@ -1,0 +1,16 @@
+{
+  "appName": "FlashMaster",
+  "nav_decks": "Mazos",
+  "nav_study": "Estudiar",
+  "nav_stats": "Estadísticas",
+  "nav_settings": "Configuración",
+  "settings_title": "Configuración",
+  "settings_dark_mode": "Modo Oscuro",
+  "settings_notifications": "Habilitar Notificaciones",
+  "settings_reminder_time": "Hora de Recordatorio",
+  "settings_daily_goal": "Meta Diaria de Estudio (tarjetas)",
+  "settings_import_export_title": "Importar / Exportar Datos",
+  "settings_import_button": "Importar Datos",
+  "settings_export_button": "Exportar Datos",
+  "settings_language_label": "Idioma"
+} 

@@ -1,0 +1,124 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 210 40% 98%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 244 66% 67%; /* indigo */
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 271 76% 63%; /* violet */
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 282 60% 65%; /* purple */
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 71% 45%; 
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 244 66% 67%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 47% 11%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 47% 11%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 244 66% 67%;
+    --primary-foreground: 0 0% 100%;
+
+    --secondary: 271 76% 53%;
+    --secondary-foreground: 0 0% 100%;
+
+    --accent: 282 60% 45%;
+    --accent-foreground: 0 0% 100%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --destructive: 0 62.8% 40.6%;
+    --destructive-foreground: 0 0% 98%;
+
+    --success: 142 71% 35%;
+    --success-foreground: 0 0% 100%;
+
+    --warning: 38 92% 40%;
+    --warning-foreground: 0 0% 100%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 244 66% 57%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans;
+  }
+
+  .flip-card {
+    @apply perspective-1000;
+  }
+
+  .flip-card-inner {
+    @apply preserve-3d transition-transform duration-500;
+  }
+
+  .flip-card-front,
+  .flip-card-back {
+    @apply backface-hidden absolute w-full h-full;
+  }
+
+  .flip-card-back {
+    @apply transform rotate-y-180;
+  }
+}
+
+@layer utilities {
+  .xp-pop {
+    animation: xp-pop-animation 0.3s ease-out;
+  }
+
+  @keyframes xp-pop-animation {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.25);
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+}

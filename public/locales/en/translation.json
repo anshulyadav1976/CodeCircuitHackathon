@@ -1,0 +1,16 @@
+{
+  "appName": "FlashMaster",
+  "nav_decks": "Decks",
+  "nav_study": "Study",
+  "nav_stats": "Stats",
+  "nav_settings": "Settings",
+  "settings_title": "Settings",
+  "settings_dark_mode": "Dark Mode",
+  "settings_notifications": "Enable Notifications",
+  "settings_reminder_time": "Reminder Time",
+  "settings_daily_goal": "Daily Study Goal (cards)",
+  "settings_import_export_title": "Import / Export Data",
+  "settings_import_button": "Import Data",
+  "settings_export_button": "Export Data",
+  "settings_language_label": "Language"
+} 
